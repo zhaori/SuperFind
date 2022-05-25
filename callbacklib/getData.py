@@ -107,6 +107,10 @@ def new_work():
     Process(target=new).run()
 
 
+def select_work():
+    pass
+
+
 def open_github():
     def url_from_github():
         request.urlopen("https://github.com/zhaori")

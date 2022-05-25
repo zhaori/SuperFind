@@ -10,11 +10,13 @@ user_music = path.join(user_home, 'Music')
 user_onedrive = path.join(user_home, 'OneDrive')
 user_menu = path.join(user_home, r'\AppData\Roaming\Microsoft\Windows\Start Menu')
 myFile = r'D:\我的文件\我的收藏库'
+myFile2 = r"E:"
 
 # find_all 将搜索此文件夹,在find_all里自定义添加选项
 find_all = [
     myFile,
-    user_menu
+    user_menu,
+    myFile2
 ]
 for _ in range(4, 20, 2):
     try:

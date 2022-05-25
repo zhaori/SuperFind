@@ -19,7 +19,6 @@ class SQLiteDB(object):
     def com_clone(self):
         # 提交事务及关闭数据库连接
         self.con.commit()
-        self.con.close()
 
     def new_sql(self):
         # 数据库创建、插入表
@@ -43,10 +42,9 @@ class SQLiteDB(object):
         # with sqlite3.connect(self.dbpath):
         self.cur.execute(f"delete from {self.table} where {element}")
 
-    def delete_table(self, table_name):
-        # 删除表
-        with sqlite3.connect(self.dbpath) as con:
-            con.execute(f"drop table {table_name}")
+    def null_table(self, table_name):
+        # 清空表
+        self.cur.execute(f" truncate table {table_name}")
 
     def tables(self):
         # 查询表
@@ -65,9 +63,7 @@ class SQLiteDB(object):
     def search_sql(self, query):
         # query 输入查询的字段，多个字段用,分开，如 'name, password, arg'
         # 查询数据
-        with sqlite3.connect(self.dbpath) as con:
-            sql_data = con.execute(
-                f"select {query} from {self.table}")
+        sql_data = self.con.execute(f"select {query} from {self.table}")
         return sql_data.fetchall()
 
     def search_sql_id(self, id, query=None):
@@ -80,11 +76,27 @@ class SQLiteDB(object):
                 f"select {query} from {self.table} where id={id}")
         return sql_data.fetchall()
 
+    def search_key_all(self, table, key, value):
+        # 根据条件返回值
+        data = self.con.execute(f"select * from {table} where {key} = " f"'{value}'")
+        return data.fetchall()
+
+    def search_id(self, expression, id_name=None):
+        # 根据字段返回id
+        if id_name is None:
+            id_name = 'id'
+
+        sql_data = self.cur.execute(f"select {id_name} from {self.table} where {expression}")
+        return sql_data.fetchall()
+
     def update(self, table, value, data, id):
         # 更新数据
         with sqlite3.connect(self.dbpath) as con:
             con.execute(f"update {table} set {value} = '{data}' where id = {id}")
             # con.execute('update pwd set username = "zzg" where id = 1')
+
+    def quit(self):
+        self.con.close()
 
 
 class memoryDB(object):

@@ -2,23 +2,24 @@ import os
 from threading import Thread
 
 
-class Py_install(object):
+class PackInstall(object):
     def __init__(self):
         self.package_list = [
             'fuzzywuzzy==0.18.0',
             'ttkbootstrap==1.7.6',
             # 'watchdog==2.1.5',
             'jieba==0.42.1',
-            # 'pymongo==3.12.0',
+            'pymongo==4.1.1',
             'python-Levenshtein==0.12.2',
             'redis==2.10.6',
             'pyperclip==1.8.2',
+            'tinydb=4.7.0'
             # 'pyinstaller'
         ]
-        self.install_list = [Thread(target=self.__install_page, args=(s,)) for s in self.package_list]
+        self.install_list = [Thread(target=self._install_page, args=(s,)) for s in self.package_list]
 
     @staticmethod
-    def __install_page(s_name):
+    def _install_page(s_name):
         os.system(f'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {s_name}')
 
     def install(self):
@@ -34,4 +35,4 @@ def upgrade_pip():
 
 if __name__ == '__main__':
     upgrade_pip()
-    Py_install().install()
+    PackInstall().install()

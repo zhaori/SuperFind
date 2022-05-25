@@ -22,10 +22,15 @@ db_sql = f"""
     ) values (:suffix, :filename, :path, :size, :ModificationDate)
 """
 
-# redis 配置
+##### redis 配置
 redis_host = '127.0.0.1'
 redis_port = 6379
 
 # redis指定数据库存放
 suffix_db = 0
 file_db = 1
+
+#### MongoDB 配置
+
+mongo_host = '127.0.0.1'
+mongo_port = 27017
