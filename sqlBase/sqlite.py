@@ -9,12 +9,8 @@ class SQLiteDB(object):
         self.mode = mode  # 插入表
         self.sql = sql  # 插入数据
         self.dbpath = path  # 数据库存储路径
-
-        try:
-            self.con = sqlite3.connect(self.dbpath, timeout=1)
-            self.cur = self.con.cursor()
-        except sqlite3.OperationalError:
-            raise '未找到SQLite数据库或者无法打开'
+        self.con = sqlite3.connect(self.dbpath, timeout=1)
+        self.cur = self.con.cursor()
 
     def com_clone(self):
         # 提交事务及关闭数据库连接
@@ -49,21 +45,20 @@ class SQLiteDB(object):
     def tables(self):
         # 查询表
         # sqlite_sequence是SQLite数据库一张隐含的表，表字段就是数据库里所有的表名称
-        with sqlite3.connect(self.dbpath) as con:
-            sql_table = con.execute("select name from sqlite_sequence")
-            return sql_table.fetchall()
+
+        sql_table = self.cur.execute("select name from sqlite_sequence")
+        return sql_table.fetchall()
 
     def search_key(self, table_name):
         # 查表字段
-        with sqlite3.connect(self.dbpath) as con:
-            k = con.execute(f'select * from {table_name}')
-            key_name_list = [data[0] for data in k.description]
-            return key_name_list
+        k = self.cur.execute(f'select * from {table_name}')
+        key_name_list = [data[0] for data in k.description]
+        return key_name_list
 
     def search_sql(self, query):
         # query 输入查询的字段，多个字段用,分开，如 'name, password, arg'
         # 查询数据
-        sql_data = self.con.execute(f"select {query} from {self.table}")
+        sql_data = self.cur.execute(f"select {query} from {self.table}")
         return sql_data.fetchall()
 
     def search_sql_id(self, id, query=None):
@@ -71,14 +66,13 @@ class SQLiteDB(object):
         # 查询数据
         if query is None:
             query = '*'
-        with sqlite3.connect(self.dbpath) as con:
-            sql_data = con.execute(
-                f"select {query} from {self.table} where id={id}")
+        sql_data = self.cur.execute(
+            f"select {query} from {self.table} where id={id}")
         return sql_data.fetchall()
 
     def search_key_all(self, table, key, value):
         # 根据条件返回值
-        data = self.con.execute(f"select * from {table} where {key} = " f"'{value}'")
+        data = self.cur.execute(f"select * from {table} where {key} = " f"'{value}'")
         return data.fetchall()
 
     def search_id(self, expression, id_name=None):
@@ -91,9 +85,7 @@ class SQLiteDB(object):
 
     def update(self, table, value, data, id):
         # 更新数据
-        with sqlite3.connect(self.dbpath) as con:
-            con.execute(f"update {table} set {value} = '{data}' where id = {id}")
-            # con.execute('update pwd set username = "zzg" where id = 1')
+        self.cur.execute(f"update {table} set {value} = '{data}' where id = {id}")
 
     def quit(self):
         self.con.close()
@@ -131,56 +123,6 @@ class memoryDB(object):
         # 执行内存数据库脚本
         cur_file.executescript(str_buffer.getvalue())
         cur_file.close()
-
-
-'''class memoryDB(object):
-    def __init__(self, table, mode, sql, path):
-        self.table = table
-        self.mode = mode
-        self.sql = sql
-        self.db = path
-        self.con = sqlite3.connect(":memory:")
-        self.cur = self.con.cursor()
-        self.memory = StringIO()
-
-    def memory_script(self, data: list):
-        self.cur.execute(self.mode)
-        for i in data:
-            self.cur.execute(self.sql, i)
-    """def get_script(self):
-        self.cur.execute(f"select * from {self.table}")
-        self.cur.fetchall()"""
-
-    def new(self):
-        self.cur.execute(f"select * from {self.table}")
-        self.cur.fetchall()
-
-        for line in self.con.iterdump():
-            self.memory.write('%s\n' % line)
-        self.cur.close()
-        con_file = sqlite3.connect(self.db)
-        cur_file = con_file.cursor()
-        # 执行内存数据库脚本
-        cur_file.executescript(self.memory.getvalue())
-        cur_file.close()
-'''
-
-"""def memory_db(table, mode, sql, data: dict, db):
-    con = sqlite3.connect(":memory:")
-    cur = con.cursor()
-    cur.execute(mode)
-    cur.execute(sql, data)
-    cur.execute(f"select * from {table}")
-    cur.fetchall()
-    str_buffer = StringIO()
-    for line in con.iterdump():
-        str_buffer.write('%s\n' % line)
-    cur.close()
-    con_file = sqlite3.connect(db)
-    cur_file = con_file.cursor()
-    # 执行内存数据库脚本
-    cur_file.executescript(str_buffer.getvalue())
-    cur_file.close()"""
 
 
 def str_to_tuple(n):

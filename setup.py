@@ -9,7 +9,7 @@ build_exe_options = {"packages": [], "excludes": []}
 # console application).
 base = None
 if sys.platform == "win32":
-      base = "Win32GUI"
+    base = "Win32GUI"
 
 setup(name="gui",
       version="8.1",

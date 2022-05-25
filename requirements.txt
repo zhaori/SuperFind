@@ -1,4 +1,0 @@
-ttkbootstrap~=1.7.6
-fuzzywuzzy~=0.18.0
-redis~=2.10.6
-pyperclip~=1.8.2

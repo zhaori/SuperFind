@@ -1,19 +1,22 @@
-from lib.Chooseplan import SaveTask
-from fuzzywuzzy import fuzz
-from ttkbootstrap import Window, Button, StringVar, Combobox, Label, Entry, IntVar
-from sqlBase.sqlite import *
-from setting import filter_intensity, APP_TITLE
-from ttkbootstrap.tooltip import ToolTip
-from tkinter.messagebox import showinfo, showerror
-from _tkinter import TclError
 import json
-from os import path
+from _tkinter import TclError
+from tkinter.messagebox import showinfo
+
+from fuzzywuzzy import fuzz
+from ttkbootstrap import Window, Button, StringVar, Combobox, Entry
+from ttkbootstrap.tooltip import ToolTip
+
+from lib.Chooseplan import SaveTask
+from setting import filter_intensity, select_task_file
+from setting import task_db, ico
+from sqlBase.sqlite import *
 
 
 class SelectTask(object):
     def __init__(self):
-        self.db = SaveTask('../data/TaskDB.db')
+        self.db = SaveTask(task_db)
         self.root = Window(title='加载任务',
+                           iconphoto=ico,
                            themename='cosmo',
                            resizable=(False, False))
         self.style = "primary"
@@ -50,10 +53,10 @@ class SelectTask(object):
             "loop_time": select_db_data[5]
         }
         try:
-            if path.isfile('runtask.json') is False:
-                with open('runtask.json', 'w', encoding="utf-8") as f:
-                    f.write(json.dumps(data_json, indent=4, ensure_ascii=False))
-            showinfo('任务选择',    f'任务选择成功，任务名为{select_db_data[1]}')
+            with open(select_task_file, 'w', encoding="utf-8") as f:
+                f.write(json.dumps(data_json, indent=4, ensure_ascii=False))
+            showinfo('任务选择', f'任务选择成功，任务名为{select_db_data[1]}')
+            self.root.quit()
         except:
             pass
 

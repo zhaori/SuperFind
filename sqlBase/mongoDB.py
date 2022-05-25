@@ -1,5 +1,6 @@
-import pymongo
 import os
+
+import pymongo
 
 
 class MongodbServer(object):

@@ -9,11 +9,11 @@ class PackInstall(object):
             'ttkbootstrap==1.7.6',
             # 'watchdog==2.1.5',
             'jieba==0.42.1',
-            'pymongo==4.1.1',
+            # 'pymongo==4.1.1',
             'python-Levenshtein==0.12.2',
             'redis==2.10.6',
             'pyperclip==1.8.2',
-            'tinydb=4.7.0'
+            # 'tinydb=4.7.0'
             # 'pyinstaller'
         ]
         self.install_list = [Thread(target=self._install_page, args=(s,)) for s in self.package_list]
@@ -34,5 +34,5 @@ def upgrade_pip():
 
 
 if __name__ == '__main__':
-    upgrade_pip()
+    # upgrade_pip()
     PackInstall().install()

@@ -1,9 +1,8 @@
 import hashlib
 import os
-from multiprocessing import Process
 from time import strftime, localtime
 from tkinter.messagebox import showinfo, showerror
-from urllib import request
+import webbrowser
 
 from pyperclip import copy
 
@@ -100,19 +99,23 @@ def cleanIndex():
 
 
 def new_work():
-    def new():
-        os.system(r"C:\Users\zzg\PyVenv\SuperFindGUI\Scripts\python.exe "
-                  r"C:/Users/zzg/Nutstore/1/我的坚果云/开发/code/SuperFindGUI/lib/tkcalendar.py")
+    def run():
+        os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
+                  r"C:\Users\14715\OneDrive\code\Python\exploitation\SuperFind\lib\tkcalendar.py")
 
-    Process(target=new).run()
+    Thread(target=run).start()
 
 
 def select_work():
-    pass
+    def run():
+        os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
+                  r".\lib\select_task.py")
+
+    Thread(target=run).start()
 
 
 def open_github():
     def url_from_github():
-        request.urlopen("https://github.com/zhaori")
+        webbrowser.open("https://github.com/zhaori")
 
     Thread(target=url_from_github).start()

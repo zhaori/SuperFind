@@ -5,14 +5,14 @@ from ttkbootstrap.constants import *
 from callbacklib.getData import *
 from searchEngine.RefreshFilters import refreshFilter
 from searchEngine.result import get_list_data, filename_db
-from setting import filter_intensity
+from setting import filter_intensity, ico
 
 
 class AppGUI(object):
     def __init__(self) -> None:
         self.root = Window(
             title=APP_TITLE,
-            iconphoto="./icons8_search_client.ico",
+            iconphoto=ico,
             themename="cosmo",
             resizable=(False, False)  # 设置窗口是否可以更改大小
         )
@@ -31,7 +31,8 @@ class AppGUI(object):
         self.num2 = Menu(self.menus, tearoff=0, activeborderwidth=4)
         self.menus.add_cascade(label='文件', menu=self.num2)
         self.num2.add_command(label='创建计划', command=new_work)
-        self.num2.add_command(label='选择计划', command=None)
+        self.num2.add_command(label='选择计划', command=select_work)
+        self.num2.add_separator()
         self.num2.add_command(label='导入计划', command=None)
         self.num2.add_command(label='导出计划', command=None)
         self.num2.add_separator()
@@ -51,12 +52,12 @@ class AppGUI(object):
         self.num4.add_command(label='加入收藏夹', command=None)
         self.num4.add_command(label='管理收藏夹', command=None)
 
-        self.num = Menu(self.menus, tearoff=0, activeborderwidth=4)
-        self.menus.add_cascade(label='关于', menu=self.num)
-        self.num.add_command(label='设置', command=option_cmd)
-        self.num.add_command(label='Github', command=open_github)
-        self.num.add_command(label='许可协议', command=None)
-        self.num.add_command(label='使用说明', command=None)
+        self.num5 = Menu(self.menus, tearoff=0, activeborderwidth=4)
+        self.menus.add_cascade(label='关于', menu=self.num5)
+        self.num5.add_command(label='设置', command=option_cmd)
+        self.num5.add_command(label='Github', command=open_github)
+        self.num5.add_command(label='许可协议', command=None)
+        self.num5.add_command(label='使用说明', command=None)
         self.root.config(menu=self.menus)
 
         # 搜索框

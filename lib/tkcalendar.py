@@ -1,14 +1,16 @@
 import sqlite3
 from tkinter import filedialog
+
 from ttkbootstrap import Window, Button, StringVar, Combobox, Label, Entry, IntVar
 from ttkbootstrap.tooltip import ToolTip
-from setting import ico
+
 from lib.Chooseplan import SaveTask
+from setting import ico, task_db
 
 
 class Calendar(object):
     def __init__(self):
-        self.db = SaveTask('../data/TaskDB.db')
+        self.db = SaveTask(task_db)
         try:
             self.db.database_init()
         except sqlite3.OperationalError:
