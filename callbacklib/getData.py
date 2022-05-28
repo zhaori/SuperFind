@@ -11,6 +11,7 @@ from searchEngine.differentIndex import RefreshIndex
 from searchEngine.findDocument import *
 from setting import APP_TITLE
 from sqlBase.redisDB import RedisServer
+from lib.transfer import export_task, import_task
 
 
 class GetData(object):
@@ -113,6 +114,22 @@ def select_work():
 
     Thread(target=run).start()
 
+
+def export():
+    # 导出任务
+    try:
+        Thread(target=export_task).start()
+        showinfo('导出任务', '导出成功')
+    except:
+        showerror('导出任务', '导出失败')
+
+
+def importTask():
+    try:
+        Thread(target=import_task).start()
+        showinfo('导入任务', '导出成功')
+    except:
+        showerror('导入任务', '导出失败')
 
 def open_github():
     def url_from_github():
