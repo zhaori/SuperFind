@@ -6,7 +6,6 @@ class SaveTask(object):
     def __init__(self, db_name):
         self.db_name = db_name
         self.task_table = 'task'
-        self.select_table = 'pick'
         self.task_mode = f"""
                     create table {self.task_table}(
                         [task_id] integer PRIMARY KEY AUTOINCREMENT,

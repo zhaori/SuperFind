@@ -20,7 +20,7 @@ class PackInstall(object):
 
     @staticmethod
     def _install_page(s_name):
-        os.system(f'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {s_name}')
+        os.system(f'pypy -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {s_name}')
 
     def install(self):
         for p in self.install_list:
@@ -30,9 +30,9 @@ class PackInstall(object):
 
 
 def upgrade_pip():
-    os.system('pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip')
+    os.system('pypy -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip')
 
 
 if __name__ == '__main__':
-    # upgrade_pip()
+    upgrade_pip()
     PackInstall().install()
