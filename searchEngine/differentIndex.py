@@ -18,27 +18,41 @@ class createIndex(object):
         self.new_file = []
         self.new_id = []
         self.new_path = []
+        self.new_size = []
+        self.new_ctime = []
+        self.new_mtime = []
 
     def collect(self):
-        for id, suffix, file, path in zip(self.cache_db.search_sql('id'), self.cache_db.search_sql('suffix'),
-                                          self.cache_db.search_sql('filename'),
-                                          self.cache_db.search_sql('path')):
+        for id, suffix, file, path, size, create_time, update_time in zip(self.cache_db.search_sql('id'),
+                                                                          self.cache_db.search_sql('suffix'),
+                                                                          self.cache_db.search_sql('filename'),
+                                                                          self.cache_db.search_sql('path'),
+                                                                          self.cache_db.search_sql("size"),
+                                                                          self.cache_db.search_sql('create_time'),
+                                                                          self.cache_db.search_sql('update_time')):
             self.new_id.append(str(id).strip("(',')"))
             self.new_suffix.append(str(suffix).strip("(',')"))
             self.new_file.append(str(file).strip("(',')"))
             self.new_path.append(str(path).strip("(',')"))
+            self.new_size.append(str(size).strip("(',')"))
+            self.new_ctime.append(str(create_time).strip("(',')"))
+            self.new_mtime.append(str(update_time).strip("(',')"))
 
     def _zip_data(self) -> zip:
-        return zip(self.new_id, self.new_suffix, self.new_file, self.new_path)
+        return zip(self.new_id, self.new_suffix, self.new_file, self.new_path, self.new_size, self.new_ctime,
+                   self.new_mtime)
 
     def filename_collect(self):
-        for id, suffix, file, path in self._zip_data():
+        for id, suffix, file, path, size, create_time, update_time in self._zip_data():
             if os.path.splitext(file)[1][1:] in self.filter_list:
                 data = {
                     "indexID": id,
                     "suffix": suffix,
                     "filename": file,
-                    "path": path
+                    "path": path,
+                    "size": size,
+                    "create_time": create_time,
+                    "update_time": update_time
                 }
                 self.file_redis.push(file, data)
             else:

@@ -1,6 +1,7 @@
+import os
 import sqlite3
+import time
 from datetime import datetime
-from os import popen, path, stat
 from threading import Thread
 
 from config.server import db_table, db_mode, db
@@ -13,11 +14,13 @@ def file_info(file: str) -> dict:
     # 构建一个存入数据库的数据格式 字典
     try:
         info = {
-            "suffix": path.splitext(file)[1][1:],
-            "filename": path.basename(file),
-            "path": path.dirname(file),
-            "size": path.getsize(file),
-            "ModificationDate": datetime.fromtimestamp(stat(file).st_mtime).strftime('%Y%m%d%H%M')
+            "suffix": os.path.splitext(file)[1][1:],
+            "filename": os.path.basename(file),
+            "path": os.path.dirname(file),
+            "size": os.path.getsize(file),
+            "create_time": time.strftime('%Y.%m.%d.%X', time.localtime(os.stat(file).st_ctime)),
+            "update_time": time.strftime('%Y.%m.%d.%X', time.localtime(os.stat(file).st_mtime)),
+            "ModificationDate": datetime.fromtimestamp(os.stat(file).st_mtime).strftime('%Y%m%d%H%M')
         }
         return info
     except OSError:
@@ -25,8 +28,8 @@ def file_info(file: str) -> dict:
 
 
 def find(root):
-    for f in popen(f'dir /a:-d /s /b {root}'):
-        if str(path.basename(str(f).strip('\n'))).find('.') != 0:
+    for f in os.popen(f'dir /a:-d /s /b {root}'):
+        if str(os.path.basename(str(f).strip('\n'))).find('.') != 0:
             files_list.append(file_info(str(f).strip('\n')))
 
 
@@ -62,9 +65,10 @@ def cache_db():
     for ff in files_list:
         cur.execute(f"""
        insert into {db_table} (
-            suffix, filename, path, size, ModificationDate
-        ) values (:suffix, :filename, :path, :size, :ModificationDate)
-    """, (ff.get("suffix"), ff.get("filename"), ff.get("path"), ff.get("size"), ff.get("ModificationDate")))
+            suffix, filename, path, size, create_time, update_time, ModificationDate
+        ) values (:suffix, :filename, :path, :size, :create_time, :update_time, :ModificationDate)
+    """, (ff.get("suffix"), ff.get("filename"), ff.get("path"), ff.get("size"), ff.get("create_time"),
+          ff.get("update_time"), ff.get("ModificationDate")))
     con.commit()
     con.close()
 

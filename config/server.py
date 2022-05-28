@@ -12,14 +12,16 @@ db_mode = f"""
         suffix varchar(10),
         filename varchar(120),
         path varchar(120),
+        create_time varchar(10),
+        update_time varchar(10),
         size text,
         ModificationDate integer(12)
     )
 """
 db_sql = f"""
     insert into {db_table} (
-        suffix, filename, path, size, ModificationDate
-    ) values (:suffix, :filename, :path, :size, :ModificationDate)
+        suffix, filename, path, size,create_time, update_time, ModificationDate
+    ) values (:suffix, :filename, :path, :size,:create_time, :update_time, :ModificationDate)
 """
 
 ##### redis 配置
@@ -29,8 +31,3 @@ redis_port = 6379
 # redis指定数据库存放
 suffix_db = 0
 file_db = 1
-
-#### MongoDB 配置
-
-mongo_host = '127.0.0.1'
-mongo_port = 27017

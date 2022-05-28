@@ -46,7 +46,7 @@ class AppGUI(object):
         self.num3.add_command(label='清除本地缓存', command=cleanCache)
         self.num3.add_command(label='清除本地索引', command=cleanIndex)
         self.num3.add_separator()
-        self.num3.add_command(label='启动自动任务', command=None)
+        self.num3.add_command(label='启动自动任务', command=auto_work)
         self.root.config(menu=self.menus)
 
         self.num4 = Menu(self.menus, tearoff=0, activeborderwidth=4)
@@ -103,7 +103,7 @@ class AppGUI(object):
         self.table.heading('文件后缀名', text='文件后缀名', anchor=CENTER)
         self.table.heading('创建时间', text='创建时间', anchor=CENTER)
         self.table.heading('修改时间', text='修改时间', anchor=CENTER)
-        self.table.heading('文件大小', text='文件大小', anchor=CENTER)
+        self.table.heading('文件大小', text='文件大小(KB)', anchor=CENTER)
 
         self.table.column('文件名', width=20, minwidth=30, anchor=S)  # 定义列
         self.table.column('所在路径', width=250, minwidth=100, anchor=S)
@@ -174,7 +174,7 @@ class AppGUI(object):
             if filter_intensity <= fuzz.partial_ratio(_, get_text) <= 100:
                 for i in get_list_data(_):
                     if i.get('suffix') in self._combox_handle():
-                        self.table.insert('', END, values=[i.get('filename'), i.get('path'), i.get('suffix')])
+                        self.table.insert('', END, values=[i.get('filename'), i.get('path'), i.get('suffix'), i.get("create_time"), i.get("update_time"),i.get("size")])
         # self.table.bind('<Button-1>', self.left_button)  # 左键单击
         self.table.bind('<Button-3>', self.right_button)  # 右键单击
         self.table.bind('<Double-1>', self.open_file)  # 左键双击

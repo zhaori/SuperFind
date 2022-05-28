@@ -12,6 +12,7 @@ from searchEngine.findDocument import *
 from setting import APP_TITLE
 from sqlBase.redisDB import RedisServer
 from lib.transfer import export_task, import_task
+from lib.autotask import get_auto_task
 
 
 class GetData(object):
@@ -78,7 +79,7 @@ def localIndex_cmd():
         Thread(target=RefreshIndex).start()
         showinfo('提示', '本地索引已成功创建')
     except Exception as e:
-        pass
+        showerror("ERROR", str(e))
 
 
 def cleanCache():
@@ -107,6 +108,10 @@ def new_work():
     Thread(target=run).start()
 
 
+def auto_work():
+    Thread(target=get_auto_task).start()
+
+
 def select_work():
     def run():
         os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
@@ -130,6 +135,7 @@ def importTask():
         showinfo('导入任务', '导出成功')
     except:
         showerror('导入任务', '导出失败')
+
 
 def open_github():
     def url_from_github():
