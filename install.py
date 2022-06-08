@@ -7,20 +7,18 @@ class PackInstall(object):
         self.package_list = [
             'fuzzywuzzy==0.18.0',
             'ttkbootstrap==1.7.6',
-            # 'watchdog==2.1.5',
+            'watchdog==2.1.8',
             'jieba==0.42.1',
-            # 'pymongo==4.1.1',
+            'pymongo==4.1.1',
             'python-Levenshtein==0.12.2',
             'redis==2.10.6',
-            'pyperclip==1.8.2',
-            # 'tinydb=4.7.0'
-            # 'pyinstaller'
+            'pyperclip==1.8.2'
         ]
         self.install_list = [Thread(target=self._install_page, args=(s,)) for s in self.package_list]
 
     @staticmethod
     def _install_page(s_name):
-        os.system(f'pypy -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {s_name}')
+        os.system(f'pip install -i https://pypi.tuna.tsinghua.edu.cn/simple {s_name}')
 
     def install(self):
         for p in self.install_list:
@@ -30,7 +28,7 @@ class PackInstall(object):
 
 
 def upgrade_pip():
-    os.system('pypy -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip')
+    os.system('pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip')
 
 
 if __name__ == '__main__':
