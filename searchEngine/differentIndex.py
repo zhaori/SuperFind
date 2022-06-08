@@ -4,14 +4,16 @@ from threading import Thread
 
 from config.server import *
 from searchEngine.RefreshFilters import refreshFilter
-from sqlBase.redisDB import RedisServer
-from sqlBase.sqlite import SQLiteDB
+from lib.redisDB import RedisServer
+from lib.sqlite import SQLiteDB
+
+cache_db = RedisServer(redis_host, redis_port, db=file_db)
 
 
 class createIndex(object):
     def __init__(self):
         self.cache_db = SQLiteDB(table=db_table, path=db)
-        self.file_redis = RedisServer(redis_host, redis_port, db=file_db)
+        # self.file_redis = RedisServer(redis_host, redis_port, db=file_db)
         self.filter_list = refreshFilter().get_data()['all']
         self.suffix_list = []
         self.new_suffix = []
@@ -54,7 +56,7 @@ class createIndex(object):
                     "create_time": create_time,
                     "update_time": update_time
                 }
-                self.file_redis.push(file, data)
+                cache_db.push(file, data)
             else:
                 continue
 
@@ -62,8 +64,8 @@ class createIndex(object):
 def RefreshIndex():
     new_index = createIndex()
     new_index.collect()
-    _thread = Thread(target=new_index.filename_collect)
-    _thread.start()
+    Thread(target=new_index.filename_collect).start()
+    cache_db.save()
 
 
 if __name__ == "__main__":

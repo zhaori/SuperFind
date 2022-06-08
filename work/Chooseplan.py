@@ -1,4 +1,4 @@
-from sqlBase.sqlite import *
+from lib.sqlite import *
 
 
 class SaveTask(object):
@@ -33,6 +33,9 @@ class SaveTask(object):
 
     def delete(self, table):
         self.task_db.null_table(table)
+
+    def delete_data(self, key, value):
+        self.task_db.delete(key, value)
 
     def query(self, exp):
         return self.task_db.search_sql(exp)

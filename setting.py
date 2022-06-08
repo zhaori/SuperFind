@@ -1,4 +1,6 @@
 from os import popen, path
+from ctypes import windll
+WINDLL = windll.shell32.SetCurrentProcessExplicitAppUserModelID('version')
 
 user_home = str(popen(r'echo C:\Users\%USERNAME%').readline()).strip('\n')
 user_video = path.join(user_home, 'Videos')
@@ -8,7 +10,7 @@ user_download = path.join(user_home, 'Downloads')
 user_music = path.join(user_home, 'Music')
 user_onedrive = path.join(user_home, 'OneDrive')
 user_menu = path.join(user_home, r'\AppData\Roaming\Microsoft\Windows\Start Menu')
-myFile = r'D:\我的文件\我的收藏库'
+myFile = r'D:\我的文件'
 
 # find_all 将搜索此文件夹,在find_all里自定义添加选项
 find_all = [

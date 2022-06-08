@@ -31,3 +31,7 @@ redis_port = 6379
 # redis指定数据库存放
 suffix_db = 0
 file_db = 1
+
+# MongoDB
+mongo_host = "127.0.0.1"
+mongo_port = 27017

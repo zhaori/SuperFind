@@ -30,17 +30,16 @@ class SQLiteDB(object):
         如果是往数据库批量写入数据，如外部结构是for循环，能够极大提高数据存储效率
         经测试，往数据库写入2108条记录，1.0176119804382324
         """
-        # cn = self.con.cursor()
         self.cur.execute(self.sql, add_data)
 
-    def delete(self, element):
+    def delete(self, key, value):
         # 删除表里的某一项数据table,element
         # with sqlite3.connect(self.dbpath):
-        self.cur.execute(f"delete from {self.table} where {element}")
+        self.cur.execute(f"delete from {self.table} where {key}='{value}'")
 
     def null_table(self, table_name):
         # 清空表
-        self.cur.execute(f" truncate table {table_name}")
+        self.cur.execute(f"delete from {table_name}")
 
     def tables(self):
         # 查询表
@@ -86,6 +85,10 @@ class SQLiteDB(object):
     def update(self, table, value, data, id):
         # 更新数据
         self.cur.execute(f"update {table} set {value} = '{data}' where id = {id}")
+
+    def supersql(self, sql):
+        sql_data = self.cur.execute(sql)
+        return sql_data.fetchall()
 
     def quit(self):
         self.con.close()

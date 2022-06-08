@@ -4,7 +4,7 @@ from tkinter import filedialog
 from ttkbootstrap import Window, Button, StringVar, Combobox, Label, Entry, IntVar
 from ttkbootstrap.tooltip import ToolTip
 
-from lib.Chooseplan import SaveTask
+from work.Chooseplan import SaveTask
 from setting import ico, task_db
 
 
@@ -100,8 +100,8 @@ class Calendar(object):
             "loop_time": self._get_time(),
         }
         self.root.destroy()
-        self.db.insert(data, 'task')
-        self.db.submit('task')
+        self.db.insert(data)
+        self.db.submit()
         # return data['task_path']
 
         # return json.dumps(data, indent=4, ensure_ascii=False)

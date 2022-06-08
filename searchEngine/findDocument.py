@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from threading import Thread
 
-from config.server import db_table, db_mode, db
+from config.server import db_table, db_sql, db_mode, db
 from setting import search_list
 
 files_list = []
@@ -28,9 +28,14 @@ def file_info(file: str) -> dict:
 
 
 def find(root):
-    for f in os.popen(f'dir /a:-d /s /b {root}'):
+    for f in os.popen(f'dir /a:-d /s /b "{root}"'):
         if str(os.path.basename(str(f).strip('\n'))).find('.') != 0:
             files_list.append(file_info(str(f).strip('\n')))
+
+
+def getfileinfo():
+    # 直接返回得到的文件
+    return files_list
 
 
 def create_thread(function, data: list):
@@ -40,8 +45,8 @@ def create_thread(function, data: list):
     :return: 创建多线程任务
     """
     # 在生命周期里，files_list变量为公告变量且值会一直存在
-    if files_list is not None:
-        files_list.clear()
+    # if files_list is not None:
+    #     files_list.clear()
 
     thread_list = [Thread(target=function, args=(d,)) for d in data]
     for p in thread_list:
@@ -63,11 +68,7 @@ def cache_db():
         files_list.remove(None)
 
     for ff in files_list:
-        cur.execute(f"""
-       insert into {db_table} (
-            suffix, filename, path, size, create_time, update_time, ModificationDate
-        ) values (:suffix, :filename, :path, :size, :create_time, :update_time, :ModificationDate)
-    """, (ff.get("suffix"), ff.get("filename"), ff.get("path"), ff.get("size"), ff.get("create_time"),
+        cur.execute(db_sql, (ff.get("suffix"), ff.get("filename"), ff.get("path"), ff.get("size"), ff.get("create_time"),
           ff.get("update_time"), ff.get("ModificationDate")))
     con.commit()
     con.close()

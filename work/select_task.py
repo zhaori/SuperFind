@@ -6,10 +6,10 @@ from fuzzywuzzy import fuzz
 from ttkbootstrap import Window, Button, StringVar, Combobox, Entry
 from ttkbootstrap.tooltip import ToolTip
 
-from lib.Chooseplan import SaveTask
+from work.Chooseplan import SaveTask
 from setting import filter_intensity, select_task_file
 from setting import task_db, ico
-from sqlBase.sqlite import *
+from lib.sqlite import *
 
 
 class SelectTask(object):
