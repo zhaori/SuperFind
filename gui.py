@@ -32,6 +32,7 @@ class AppGUI(object):
         self.menus.add_cascade(label='文件', menu=self.num2)
         self.num2.add_command(label='创建计划', command=new_work)
         self.num2.add_command(label='选择计划', command=select_work)
+        self.num2.add_command(label='清空计划', command=delete_work)
         self.num2.add_separator()
         self.num2.add_command(label='导入计划', command=importTask)
         self.num2.add_command(label='导出计划', command=export)
@@ -51,7 +52,6 @@ class AppGUI(object):
 
         self.num4 = Menu(self.menus, tearoff=0, activeborderwidth=4)
         self.menus.add_cascade(label='收藏夹', menu=self.num4)
-        self.num4.add_command(label='加入收藏夹', command=None)
         self.num4.add_command(label='管理收藏夹', command=None)
 
         self.num5 = Menu(self.menus, tearoff=0, activeborderwidth=4)
@@ -89,9 +89,9 @@ class AppGUI(object):
         )
 
         def treeview_sort_column(tv, col, reverse):  # Treeview、列名、排列方式
-            l = [(tv.set(k, col), k) for k in tv.get_children('')]
-            l.sort(reverse=reverse)  # 排序方式
-            for index, (val, k) in enumerate(l):  # 根据排序后索引移动
+            sort_list = [(tv.set(k, col), k) for k in tv.get_children('')]
+            sort_list.sort(reverse=reverse)  # 排序方式
+            for index, (val, k) in enumerate(sort_list):  # 根据排序后索引移动
                 tv.move(k, '', index)
             tv.heading(col, command=lambda: treeview_sort_column(tv, col, not reverse))  # 重写标题，使之成为再点倒序的标题
 
@@ -144,7 +144,8 @@ class AppGUI(object):
             root_file = os.path.join(_text[1], _text[0])
 
         g = GetData(root_file)
-        menuBar = Menu(self.root, tearoff=0)
+        menuBar = Menu(self.root, tearoff=0, activeborderwidth=2)
+        menuBar.add_command(label='加入到收藏夹', command=None)
         menuBar.add_command(label='复制绝对路径', command=g.copy_absolute)
         menuBar.add_command(label='打开文件位置', command=g.open_path)
         menuBar.add_command(label='删除文件', command=g.delete_file)

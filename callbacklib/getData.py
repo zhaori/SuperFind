@@ -1,5 +1,4 @@
 import hashlib
-import os
 from time import strftime, localtime
 from tkinter.messagebox import showinfo, showerror
 import webbrowser
@@ -9,10 +8,11 @@ from pyperclip import copy
 from config.server import redis_host, redis_port, suffix_db, file_db
 from searchEngine.differentIndex import RefreshIndex
 from searchEngine.findDocument import *
-from setting import APP_TITLE
-from sqlBase.redisDB import RedisServer
-from lib.transfer import export_task, import_task
-from lib.autotask import get_auto_task
+from setting import APP_TITLE, select_task_file, task_db
+from lib.redisDB import RedisServer
+from work.transfer import export_task, import_task
+from work.autotask import NewFindData
+from work.Chooseplan import SaveTask
 
 
 class GetData(object):
@@ -65,9 +65,9 @@ def option_cmd(event=None):
     Thread(target=_option).start()
 
 
-def localfile_cmd():
+def localfile_cmd(data=search_list):
     try:
-        create_thread(function=find, data=search_list)
+        create_thread(function=find, data=data)
         cache_db()
         showinfo('提示', '本地缓存已成功创建')
     except Exception as e:
@@ -103,19 +103,33 @@ def cleanIndex():
 def new_work():
     def run():
         os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
-                  r"C:\Users\14715\OneDrive\code\Python\exploitation\SuperFind\lib\tkcalendar.py")
+                  r".\work\tkcalendar.py")
 
     Thread(target=run).start()
 
 
 def auto_work():
-    Thread(target=get_auto_task).start()
+    NewFindData().main()
 
 
 def select_work():
     def run():
         os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
-                  r".\lib\select_task.py")
+                  r".\work\select_task.py")
+
+    Thread(target=run).start()
+
+
+def delete_work():
+    def run():
+        mytaskdb = SaveTask(task_db)
+        try:
+            os.remove(select_task_file)
+        except FileNotFoundError:
+            pass
+        finally:
+            mytaskdb.delete('task')
+            mytaskdb.submit()
 
     Thread(target=run).start()
 
