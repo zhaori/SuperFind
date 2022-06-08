@@ -90,6 +90,9 @@ class SQLiteDB(object):
         sql_data = self.cur.execute(sql)
         return sql_data.fetchall()
 
+    def submitSQL(self, sql):
+        self.cur.execute(sql)
+
     def quit(self):
         self.con.close()
 

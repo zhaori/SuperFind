@@ -1,4 +1,5 @@
 from lib.sqlite import *
+from tinydb import TinyDB, Query
 
 
 class SaveTask(object):
@@ -24,10 +25,6 @@ class SaveTask(object):
 
         self.task_db = SQLiteDB(self.task_table, self.task_mode, self.task_sql, self.db_name)
 
-    def database_init(self):
-        self.task_db.new_sql()
-        self.task_db.com_clone()
-
     def insert(self, data):
         self.task_db.insert(data)
 
@@ -50,6 +47,36 @@ class SaveTask(object):
         self.task_db.com_clone()
 
 
+class AddFavorite(object):
+    def __init__(self, favorite_db='./data/Favorites.json'):
+        self.favorite_table = 'favorites'
+        self.favorite_db = favorite_db
+        self.json_db = TinyDB(self.favorite_db)
+        self.db_query = Query()
+        try:
+            self.table = self.json_db.table('favorite')
+        except:
+            pass
+
+    def insert(self, data):
+        self.table.insert(data)
+
+    def query(self, key, value):
+        return self.table.search(self.db_query[key] == f'{value}')
+
+    def search(self):
+        return self.table.all()
+
+    def delete(self, key, value):
+        self.table.remove(self.db_query[key] == f'{value}')
+
+    def submit(self):
+        self.json_db.close()
+
+
 if __name__ == "__main__":
-    db = SaveTask('../data/TaskDB.db')
+    db = AddFavorite('../data/Favorites.json')
+    # db.insert({"task_id": int(4)})
+    db.query('filename','docx')
+    # db.submit()
     # print(db.query_joint('task_name="查找E盘"'))

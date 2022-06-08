@@ -6,6 +6,7 @@ from callbacklib.getData import *
 from searchEngine.RefreshFilters import refreshFilter
 from searchEngine.result import get_list_data, filename_db
 from setting import filter_intensity, ico
+from work.Chooseplan import AddFavorite
 
 
 class AppGUI(object):
@@ -52,13 +53,16 @@ class AppGUI(object):
 
         self.num4 = Menu(self.menus, tearoff=0, activeborderwidth=4)
         self.menus.add_cascade(label='收藏夹', menu=self.num4)
-        self.num4.add_command(label='管理收藏夹', command=None)
+        self.num4.add_command(label='管理收藏夹', command=manage_favorite)
+        self.num4.add_separator()
+        for i in AddFavorite().search():
+            self.num4.add_command(label=i['filename'], command=manage_favorite)
 
         self.num5 = Menu(self.menus, tearoff=0, activeborderwidth=4)
         self.menus.add_cascade(label='关于', menu=self.num5)
         self.num5.add_command(label='设置', command=option_cmd)
         self.num5.add_command(label='Github', command=open_github)
-        self.num5.add_command(label='许可协议', command=None)
+        self.num5.add_command(label='许可协议', command=open_license)
         self.num5.add_command(label='使用说明', command=None)
         self.root.config(menu=self.menus)
 
@@ -144,8 +148,8 @@ class AppGUI(object):
             root_file = os.path.join(_text[1], _text[0])
 
         g = GetData(root_file)
-        menuBar = Menu(self.root, tearoff=0, activeborderwidth=2)
-        menuBar.add_command(label='加入到收藏夹', command=None)
+        menuBar = Menu(self.root, tearoff=0, activeborderwidth=3)
+        menuBar.add_command(label='加入到收藏夹', command=g.add_favorite)
         menuBar.add_command(label='复制绝对路径', command=g.copy_absolute)
         menuBar.add_command(label='打开文件位置', command=g.open_path)
         menuBar.add_command(label='删除文件', command=g.delete_file)
@@ -175,7 +179,8 @@ class AppGUI(object):
             if filter_intensity <= fuzz.partial_ratio(_, get_text) <= 100:
                 for i in get_list_data(_):
                     if i.get('suffix') in self._combox_handle():
-                        self.table.insert('', END, values=[i.get('filename'), i.get('path'), i.get('suffix'), i.get("create_time"), i.get("update_time"),i.get("size")])
+                        self.table.insert('', END, values=[i.get('filename'), i.get('path'), i.get('suffix'),
+                                                           i.get("create_time"), i.get("update_time"), i.get("size")])
         # self.table.bind('<Button-1>', self.left_button)  # 左键单击
         self.table.bind('<Button-3>', self.right_button)  # 右键单击
         self.table.bind('<Double-1>', self.open_file)  # 左键双击

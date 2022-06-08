@@ -2,7 +2,7 @@ import hashlib
 from time import strftime, localtime
 from tkinter.messagebox import showinfo, showerror
 import webbrowser
-
+from multiprocessing import Process
 from pyperclip import copy
 
 from config.server import redis_host, redis_port, suffix_db, file_db
@@ -12,7 +12,8 @@ from setting import APP_TITLE, select_task_file, task_db
 from lib.redisDB import RedisServer
 from work.transfer import export_task, import_task
 from work.autotask import NewFindData
-from work.Chooseplan import SaveTask
+from work.Chooseplan import SaveTask, AddFavorite
+from work.favorites import Favorites
 
 
 class GetData(object):
@@ -42,6 +43,15 @@ class GetData(object):
                  f"创建日期：{ctime} \n"
                  f"修改日期：{mtime} \n"
                  f"文件哈希值：{hashlib.md5(self.data.encode('utf8')).hexdigest()}")
+
+    def add_favorite(self):
+        f = AddFavorite()
+        f.insert(file_info(self.data))
+        f.submit()
+
+
+def manage_favorite():
+    Favorites().run()
 
 
 def about_Cmd():
@@ -156,3 +166,17 @@ def open_github():
         webbrowser.open("https://github.com/zhaori")
 
     Thread(target=url_from_github).start()
+
+
+def open_license():
+    def run():
+        os.system("Notepad2.exe LICENSE")
+
+    def run2():
+        os.system("Notepad2.exe LICENSE996_CN")
+
+    thread_list = [Thread(target=run), Thread(target=run2)]
+    for i in thread_list:
+        i.start()
+    for i in thread_list:
+        i.join()
