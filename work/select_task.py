@@ -7,8 +7,8 @@ from ttkbootstrap import Window, Button, StringVar, Combobox, Entry
 from ttkbootstrap.tooltip import ToolTip
 
 from work.Chooseplan import SaveTask
-from setting import filter_intensity, select_task_file
-from setting import task_db, ico
+from config.setting import filter_intensity, select_task_file
+from config.setting import task_db, ico
 from lib.sqlite import *
 
 
@@ -42,7 +42,6 @@ class SelectTask(object):
         return handle_data
 
     def _select_task(self, *args):
-        # self.db.query_all('task', 'task_name', self.combox_list.get())
         select_db_data = str_to_tuple(self.db.query_all('task', 'task_name', self.combox_list.get()))
         data_json = {
             "task_id": select_db_data[0],

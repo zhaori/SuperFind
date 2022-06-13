@@ -1,20 +1,19 @@
-import sqlite3
 from tkinter import filedialog
 
 from ttkbootstrap import Window, Button, StringVar, Combobox, Label, Entry, IntVar
 from ttkbootstrap.tooltip import ToolTip
 
 from work.Chooseplan import SaveTask
-from setting import ico, task_db
+from config.setting import ico, task_db
 
 
 class Calendar(object):
     def __init__(self):
         self.db = SaveTask(task_db)
-        try:
-            self.db.database_init()
-        except sqlite3.OperationalError:
-            pass
+        # try:
+        #     self.db.database_init()
+        # except sqlite3.OperationalError:
+        #     pass
         self.root = Window(title='计划时间',
                            themename='cosmo',
                            iconphoto=ico,
@@ -99,12 +98,9 @@ class Calendar(object):
             "end_time": self._get_end(),
             "loop_time": self._get_time(),
         }
-        self.root.destroy()
         self.db.insert(data)
         self.db.submit()
-        # return data['task_path']
-
-        # return json.dumps(data, indent=4, ensure_ascii=False)
+        self.root.destroy()
 
     def _generate(self):
         gen_btn = Button(self.root, text='生成任务', command=self._get_all_data, bootstyle='success')

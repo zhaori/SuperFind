@@ -77,6 +77,6 @@ class AddFavorite(object):
 if __name__ == "__main__":
     db = AddFavorite('../data/Favorites.json')
     # db.insert({"task_id": int(4)})
-    db.query('filename','docx')
+    db.delete("filename","老胡家的游戏列表.xls")
     # db.submit()
     # print(db.query_joint('task_name="查找E盘"'))

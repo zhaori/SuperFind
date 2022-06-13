@@ -5,7 +5,7 @@ from datetime import datetime
 from threading import Thread
 
 from config.server import db_table, db_sql, db_mode, db
-from setting import search_list
+from config.setting import search_list
 
 files_list = []
 

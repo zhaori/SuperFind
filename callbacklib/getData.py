@@ -2,13 +2,12 @@ import hashlib
 from time import strftime, localtime
 from tkinter.messagebox import showinfo, showerror
 import webbrowser
-from multiprocessing import Process
 from pyperclip import copy
 
 from config.server import redis_host, redis_port, suffix_db, file_db
 from searchEngine.differentIndex import RefreshIndex
 from searchEngine.findDocument import *
-from setting import APP_TITLE, select_task_file, task_db
+from config.setting import APP_TITLE, select_task_file, task_db
 from lib.redisDB import RedisServer
 from work.transfer import export_task, import_task
 from work.autotask import NewFindData
@@ -64,13 +63,12 @@ def start_index_server():
     def _start():
         os.system('indexDB.exe')
         localIndex_cmd()
-
     Thread(target=_start).start()
 
 
 def option_cmd(event=None):
     def _option():
-        os.system(r"Notepad2.exe setting.py")
+        os.system(r"Notepad2.exe ./config/setting.py")
 
     Thread(target=_option).start()
 
@@ -86,7 +84,9 @@ def localfile_cmd(data=search_list):
 
 def localIndex_cmd():
     try:
-        Thread(target=RefreshIndex).start()
+        t = Thread(target=RefreshIndex)
+        t.setDaemon(True)
+        t.start()
         showinfo('提示', '本地索引已成功创建')
     except Exception as e:
         showerror("ERROR", str(e))
@@ -112,14 +112,21 @@ def cleanIndex():
 
 def new_work():
     def run():
-        os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
-                  r".\work\tkcalendar.py")
+        os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe .\work\tkcalendar.py")
 
-    Thread(target=run).start()
+    t = Thread(target=run)
+    t.setDaemon(True)
+    t.start()
 
 
 def auto_work():
-    NewFindData().main()
+    t = Thread(target=NewFindData().main)
+    t.setDaemon(True)
+    t.start()
+
+
+def restart():
+    print(__file__)
 
 
 def select_work():
@@ -146,19 +153,11 @@ def delete_work():
 
 def export():
     # 导出任务
-    try:
-        Thread(target=export_task).start()
-        showinfo('导出任务', '导出成功')
-    except:
-        showerror('导出任务', '导出失败')
+    Thread(target=export_task).start()
 
 
 def importTask():
-    try:
-        Thread(target=import_task).start()
-        showinfo('导入任务', '导出成功')
-    except:
-        showerror('导入任务', '导出失败')
+    Thread(target=import_task).start()
 
 
 def open_github():
@@ -180,3 +179,7 @@ def open_license():
         i.start()
     for i in thread_list:
         i.join()
+
+
+if __name__ == "__main__":
+    restart()

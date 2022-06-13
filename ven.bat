@@ -1,1 +1,0 @@
-C:\Users\zgz\PyVenv\SuperFindGUI\Scripts\activate.bat

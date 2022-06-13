@@ -5,8 +5,7 @@ from ttkbootstrap.constants import *
 from callbacklib.getData import *
 from searchEngine.RefreshFilters import refreshFilter
 from searchEngine.result import get_list_data, filename_db
-from setting import filter_intensity, ico
-from work.Chooseplan import AddFavorite
+from config.setting import filter_intensity, ico
 
 
 class AppGUI(object):
@@ -24,7 +23,6 @@ class AppGUI(object):
         x = int((screenwidth - width) / 2)
         y = int((screenheight - height) / 2)
         self.root.geometry(f'{width}x{height}+{x}+{y}')
-        # self.root.wm_attributes('-topmost', 1)        # 强制将窗口放置最上面
 
     def _win(self):
         # 菜单栏menus
@@ -49,14 +47,12 @@ class AppGUI(object):
         self.num3.add_command(label='清除本地索引', command=cleanIndex)
         self.num3.add_separator()
         self.num3.add_command(label='启动自动任务', command=auto_work)
+        self.num3.add_command(label='重启本程序', command=auto_work)
         self.root.config(menu=self.menus)
 
         self.num4 = Menu(self.menus, tearoff=0, activeborderwidth=4)
         self.menus.add_cascade(label='收藏夹', menu=self.num4)
         self.num4.add_command(label='管理收藏夹', command=manage_favorite)
-        self.num4.add_separator()
-        for i in AddFavorite().search():
-            self.num4.add_command(label=i['filename'], command=manage_favorite)
 
         self.num5 = Menu(self.menus, tearoff=0, activeborderwidth=4)
         self.menus.add_cascade(label='关于', menu=self.num5)
@@ -181,7 +177,6 @@ class AppGUI(object):
                     if i.get('suffix') in self._combox_handle():
                         self.table.insert('', END, values=[i.get('filename'), i.get('path'), i.get('suffix'),
                                                            i.get("create_time"), i.get("update_time"), i.get("size")])
-        # self.table.bind('<Button-1>', self.left_button)  # 左键单击
         self.table.bind('<Button-3>', self.right_button)  # 右键单击
         self.table.bind('<Double-1>', self.open_file)  # 左键双击
 

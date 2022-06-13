@@ -1,5 +1,6 @@
 from os import popen, path
 from ctypes import windll
+
 WINDLL = windll.shell32.SetCurrentProcessExplicitAppUserModelID('version')
 
 user_home = str(popen(r'echo C:\Users\%USERNAME%').readline()).strip('\n')
@@ -31,6 +32,8 @@ ico = "药丸.png"
 
 APP_TITLE = '药丸搜索 0.0.1beta'
 
-select_task_file = r'./data/TaskDB.json'
+select_task_file = r'../data/TaskDB.json'
 
-task_db = r'./data/Cache.db'
+task_db = r'../data/Cache.db'
+
+favorite_file = './data/Favorites.json'
