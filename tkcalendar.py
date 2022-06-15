@@ -27,10 +27,10 @@ class Calendar(object):
         y = int((screenheight - height) / 2)
         self.root.geometry(f'{width}x{height}+{x}+{y}')
 
-        self.var_begin_var = IntVar(value=20220520)  # 开始日期
+        self.var_begin_var = IntVar()  # 开始日期
         self.var_begin = Entry(self.root, textvariable=self.var_begin_var, font=('宋体', 12))
 
-        self.var_end_var = IntVar(value=20220521)  # 结束日期
+        self.var_end_var = IntVar()  # 结束日期
         self.var_end = Entry(self.root, textvariable=self.var_end_var, font=('宋体', 12))
 
         self.auto_time_var = IntVar(value=3)  # 间隔循环时间 单位为秒
@@ -40,7 +40,7 @@ class Calendar(object):
         self.time_unit_list = Combobox(self.root, textvariable=self.time_unit_var, state='readonly',
                                        bootstyle=self.style)
 
-        self.textVar = StringVar(value='查找D盘')
+        self.textVar = StringVar(value='')
         self.text = Entry(self.root, textvariable=self.textVar, font=('宋体', 12))
 
         self.taskvar = StringVar()

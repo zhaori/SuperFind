@@ -59,7 +59,7 @@ class AppGUI(object):
         self.num5.add_command(label='设置', command=option_cmd)
         self.num5.add_command(label='Github', command=open_github)
         self.num5.add_command(label='许可协议', command=open_license)
-        self.num5.add_command(label='使用说明', command=None)
+        # self.num5.add_command(label='使用说明', command=None)
         self.root.config(menu=self.menus)
 
         # 搜索框

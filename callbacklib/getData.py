@@ -13,6 +13,7 @@ from work.transfer import export_task, import_task
 from work.autotask import NewFindData
 from work.Chooseplan import SaveTask, AddFavorite
 from work.favorites import Favorites
+from tkcalendar import Calendar
 
 
 class GetData(object):
@@ -53,6 +54,10 @@ def manage_favorite():
     Favorites().run()
 
 
+def start_work():
+    Calendar().run()
+
+
 def about_Cmd():
     showinfo("关于&说明", "关于：\n"
                       "作者：皮得狠 \n"
@@ -61,14 +66,15 @@ def about_Cmd():
 
 def start_index_server():
     def _start():
-        os.system('indexDB.exe')
+        os.system('start /B indexDB.exe')
         localIndex_cmd()
+
     Thread(target=_start).start()
 
 
 def option_cmd(event=None):
     def _option():
-        os.system(r"Notepad2.exe ./config/setting.py")
+        os.system(r"start /B Notepad2.exe ./config/setting.py")
 
     Thread(target=_option).start()
 
@@ -112,15 +118,13 @@ def cleanIndex():
 
 def new_work():
     def run():
-        os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe .\work\tkcalendar.py")
+        os.system('start /B tkcalendar.exe')
 
-    t = Thread(target=run)
-    t.setDaemon(True)
-    t.start()
+    Thread(target=run).start()
 
 
 def auto_work():
-    t = Thread(target=NewFindData().main)
+    t = Thread(target=NewFindData().mainloop)
     t.setDaemon(True)
     t.start()
 
@@ -131,9 +135,7 @@ def restart():
 
 def select_work():
     def run():
-        os.system(r"D:\PyVenv\SuperFind\Scripts\python.exe "
-                  r".\work\select_task.py")
-
+        os.system("start /B select_task.exe")
     Thread(target=run).start()
 
 
@@ -169,10 +171,10 @@ def open_github():
 
 def open_license():
     def run():
-        os.system("Notepad2.exe LICENSE")
+        os.system("start /B Notepad2.exe LICENSE")
 
     def run2():
-        os.system("Notepad2.exe LICENSE996_CN")
+        os.system("start /B Notepad2.exe LICENSE996_CN")
 
     thread_list = [Thread(target=run), Thread(target=run2)]
     for i in thread_list:
