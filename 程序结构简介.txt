@@ -1,0 +1,51 @@
+程序结构简介文档
+
+│  Filters.json                             文件后缀统计数据
+│  gui.py                                   主程序
+│  indexDB.exe                              数据索引数据库（redis数据库）
+│  initialize.py                            程序使用前初始化
+│  install.py                               （开发中需要引用的第三方库）
+│  LICENSE                                  GPL3许可
+│  LICENSE996                               反996许可
+│  LICENSE996_CN                            反996许可中文
+│  Notepad2.exe                             阅读器
+│  README.md                                说明开发文档
+│  setup.py
+│  药丸.png
+│  计划.md
+│
+├─callbacklib
+│  │  getData.py                            获取数据，进一步封包
+│  │  __init__.py
+│          
+├─config
+│  │  server.py                             数据库配置文件
+│  │  setting.py                            程序配置文件
+│  │  __init__.py
+│          
+├─data
+│      Cache.db
+│      TaskDB.json
+│      
+├─lib
+│  │  redisDB.py                            Python redis驱动封装
+│  │  sqlite.py                             Python SQLite驱动封装
+│  │  __init__.py
+│  │
+│          
+├─searchEngine
+│  │  differentIndex.py                     创建索引
+│  │  findDocument.py                       查找文件夹及文件
+│  │  RefreshFilters.py                     读取配置文件后缀数据
+│  │  result.py                             获取索引数据
+│  │  __init__.py
+│  │
+│          
+├─work
+│  │  autotask.py                           自动任务
+│  │  Chooseplan.py                         收藏夹数据库封装
+│  │  favorites.py                          收藏夹
+│  │  select_task.py                        选择任务
+│  │  tkcalendar.py                         创建任务
+│  │  transfer.py                           导出、导入数据
+
